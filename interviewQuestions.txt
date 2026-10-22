@@ -1,0 +1,1155 @@
+Act as a 10+ years experienced .NET Technical Interviewer. 
+
+I have 4 years of experience in .NET Core, C#, SQL, Web API, ReactJS, JavaScript, and Entity Framework.
+i will provide the interview questions you have to give answers in the following format:
+
+1. Start with a simple and long definition and Explain the concept in very easy English also Include important points that experienced interviewers expect and Give long 
+but easy-to-understand answers so I can explain confidently in interviews Make the answer sound professional but natural like a real candidate speaking in an interview.
+2. Give code base example and  where it is used in real projects
+3. Mention common interview follow-up questions with one line answer.
+ 
+
+
+
+What is the difference between value type and reference type?
+In C#, a **value type** is a data type in which the variable stores its value directly.
+When we assign one value-type variable to another value-type variable, a separate copy of the value is created. Therefore, if we change the value of one variable, 
+it does not affect the other variable because both variables have independent copies of the data.
+
+For example, `int`, `bool`, `decimal`, `struct`, and `enum` are value types.
+
+int a = 10;
+int b = a;
+
+b = 20;
+
+Console.WriteLine(a); // 10
+Console.WriteLine(b); // 20
+
+In C#, a **reference type** is a data type in which a variable holds a reference to an object rather than storing the entire object directly.
+When we assign one reference-type variable to another, the reference is copied, not the object itself. As a result, both variables can refer to the same object. If we modify the object's properties through one variable, the changes will be visible through the other variable as well.
+
+For example, `class`, `string`, arrays, and interfaces are reference types.
+
+public class Employee
+{
+    public string Name { get; set; }
+}
+
+Employee emp1 = new Employee
+{
+    Name = "Rahul"
+};
+
+Employee emp2 = emp1;
+
+emp2.Name = "Amit";
+
+Console.WriteLine(emp1.Name); // Amit
+Console.WriteLine(emp2.Name); // Amit
+
+What is the difference between ref, out, and in parameters?
+
+
+Explain boxing and unboxing with examples.
+Q: What is the difference between string and StringBuilder?
+
+"string is immutable and creates new objects whenever modified, while StringBuilder is mutable and updates the same object, making it more efficient for repeated string operations."
+
+Q: What is the difference between == and .Equals()?
+
+"== generally checks whether two objects are the same object in memory, while .Equals() checks whether two objects have the same value or content.
+
+Explain const vs readonly.
+
+Q: What are delegates and events?
+
+Delegate → A delegate is like a function pointer. It stores the reference of a method and allows one method to call another method. Who can do the work
+Event → An event is used to notify other classes when something happens. Inform everyone that something happened
+
+Q: Explain middleware in .NET Core.
+
+Middleware is a component in .NET Core that handles an HTTP request and response in the application pipeline.
+
+Each middleware can:
+
+Process the request
+Modify the request
+Stop the request
+Pass it to the next middleware
+Process the response
+
+Middleware is configured inside: Program.cs
+
+using methods like:
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseRouting();
+
+Common Middleware Example
+
+var builder = WebApplication.CreateBuilder(args);
+
+var app = builder.Build();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+Request
+   ↓
+Routing
+   ↓
+Authentication
+   ↓
+Authorization
+   ↓
+Controller
+   ↓
+Response
+
+
+Create Custom Middleware
+
+public class RequestMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public RequestMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task Invoke(HttpContext context)
+    {
+        Console.WriteLine("Before Request");
+
+        await _next(context);
+
+        Console.WriteLine("After Response");
+    }
+}
+
+Register in Program.cs
+
+app.UseMiddleware<RequestMiddleware>();
+
+Q: What is the request pipeline in ASP.NET Core?
+
+The Request Pipeline is a sequence of middleware components through which every HTTP request passes before reaching the controller and 
+every response passes back before returning to the client.
+
+The pipeline is configured in: Program.cs
+
+var builder = WebApplication.CreateBuilder(args);
+
+var app = builder.Build();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+Q: Explain filter?
+
+Filters are components in ASP.NET Core that allow us to run code before or after a controller action
+
+Filters are mainly used for:
+
+Authorization
+Logging
+Validation
+Exception handling
+Performance tracking
+
+Request
+   ↓
+Middleware
+   ↓
+Routing
+   ↓
+Filters
+   ↓
+Controller Action
+   ↓
+Filters
+   ↓
+Response
+
+1. Authorization Filter
+
+Runs first.
+
+Purpose: Checks whether user has permission to access the resource.
+
+2. Resource Filter
+
+Runs before model binding and after response generation.
+
+Purpose:
+Caching
+Performance optimization
+Short-circuit request processing
+
+3. Action Filter
+
+Runs before and after controller action execution.
+
+Purpose:
+Logging
+Validation
+Performance tracking
+
+4. Exception Filter
+
+Handles exceptions generated by action methods.
+
+Purpose:
+Centralized exception handling.
+
+5. Result Filter
+
+Runs before and after action result execution.
+
+Purpose:
+Modify or inspect response before sending to client.
+
+Q: Difference between middleware and filters.
+Middleware works for the entire application request pipeline, while filters work only at the controller or action level.
+
+Q: Explain dependency injection lifecycle:
+Dependency Injection (DI) is a design pattern used to inject dependencies (such as services, database contexts, or loggers) into classes,
+instead of creating them manually inside the class.This reduces tight coupling, makes code easy to maintain, test, and reuse.
+
+ASP.NET Core provides 3 lifecycles:
+
+Transient : A new object is created every time it is requested.
+
+builder.Services.AddTransient<IService, Service>();
+
+Scoped : One object is created per HTTP request.
+
+builder.Services.AddScoped<IService, Service>();
+
+Singleton : Only one object is created for the entire application lifetime.
+
+builder.Services.AddSingleton<IService, Service>();
+
+Q: Explain configuration in .NET Core.
+Configuration in .NET Core is used to store and read application settings like:
+
+Database connection strings
+API URLs
+JWT keys
+App settings
+Email settings
+
+Q: Explain IConfiguration.
+IConfiguration is an interface in ASP.NET Core used to read configuration values from:
+
+appsettings.json
+Environment variables
+
+Q: Explain REST API.
+API is a medium that allows two applications to communicate with each other.
+Uses HTTP methods like:
+
+GET - Fetch data
+POST - Insert data
+PUT - Update data
+PATCH - Partially update data
+DELETE - Delete data
+
+Q: How do you secure APIs?
+We secure APIs by:
+
+Authentication - Used to verify user identity.
+Authorization - Checks what user can access.
+HTTPS - Encrypts data between client and server.
+
+Q: Explain JWT authentication.
+JWT stands for JSON Web Token
+JWT is a token-based authentication system used to secure APIs.
+JWT Authentication is a secure authentication mechanism in ASP.NET Core where the server generates a JWT token after validating user credentials.
+
+The client sends this token in every API request using the Authorization header, and the server validates the token before allowing access.
+
+JWT authentication is stateless and commonly used in REST APIs.
+
+Access Token - Used to access APIs.
+Refresh Token - Used to generate a new access token when access token expires.
+
+JWT token has 3 parts:
+
+Header → contains token type and encryption algorithm
+Payload → contains user data and claims
+Signature → used to verify token integrity and security
+
+JWT Life cycle
+
+Login
+  ↓
+Validate User
+  ↓
+Generate JWT
+  ↓
+Client Stores Token
+  ↓
+Send Token with API Request
+  ↓
+Server Validates Token
+  ↓
+Allow / Reject Request
+  ↓
+Token Expires
+  ↓
+Login Again / Refresh Token
+
+In a .NET Web API + ReactJS application:
+
+React Login
+    ↓
+.NET Login API
+    ↓
+Validate username/password
+    ↓
+Generate JWT
+    ↓
+React receives JWT
+    ↓
+React sends JWT in Authorization header
+    ↓
+.NET JWT Middleware validates token
+    ↓
+Controller executes
+
+Q: What is CORS?
+CORS stands for: Cross-Origin Resource Sharing
+
+CORS is a browser security mechanism that controls cross-origin HTTP requests between frontend and backend applications.
+
+It allows or restricts requests coming from different domains, ports, or protocols.
+
+CORS is commonly used when frontend and backend are hosted on different servers.
+
+Q: Explain API versioning.
+API Versioning is a way to manage changes in APIs without breaking old applications.
+
+Q: Entity Framework?
+Entity Framework Core (EF Core) is an ORM(Object Relational Mapper) tool in .NET used to communicate with the database using C# code instead of writing SQL queries manually.
+
+Difference between First() and FirstOrDefault()
+Both are used to get the first record from collection or database.
+
+First() - Throws exception if data not found
+FirstOrDefault() - Returns default value if data not found
+
+What are the four pillars of OOP?
+Encapsulation
+Inheritance
+Polymorphism
+Abstraction
+
+Q: Explain Class?
+A Class is a blueprint or template used to create objects.
+
+Q: Explain Object?
+An object is an instance of a class.
+
+Q: Explain Encapsulation?
+Encapsulation is one of the core concepts of OOPs. It means wrapping data and methods into a single unit and restricting direct access to the data.
+
+In simple words, encapsulation is used to protect data from unauthorized access.
+Instead of allowing direct access to variables, we control access using methods or properties.
+The main purpose of encapsulation is:
+
+Data hiding
+Security
+Controlled access
+Better maintainability
+
+The main purpose of encapsulation is data security, controlled access, and validation.
+
+For example, in a banking application, account balance should not be modified directly. Instead, users should update balance only through Deposit or Withdraw methods.
+
+Real-world example:
+Think about an ATM machine.
+
+When we withdraw money:
+
+We can only use allowed operations like Withdraw or CheckBalance.
+We cannot directly access or modify the bank database.
+
+This is encapsulation because internal data is hidden and controlled access is provided.
+
+Q: Explain Abstraction?
+Abstraction is one of the important OOPs concepts.
+It means hiding internal implementation details and showing only the important functionality to the user.
+
+Real-world example:
+Think about driving a car.
+
+When we drive:
+
+We use steering
+Brake
+Accelerator
+
+But we do not know the internal engine mechanism, fuel injection process, or how the transmission works internally.
+
+using System;
+
+// Abstract class
+public abstract class Payment
+{
+    // Abstract method
+    public abstract void MakePayment();
+}
+
+// Child class
+public class CreditCardPayment : Payment
+{
+    public override void MakePayment()
+    {
+        Console.WriteLine("Payment done using Credit Card");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Payment payment = new CreditCardPayment();
+
+        payment.MakePayment();
+    }
+}
+
+Q: Explain interface?
+An interface in C# is a contract that defines what a class should do, but it does not provide the complete implementation.
+
+In simple words, an interface contains only method declarations, properties, or events, and the class that implements the interface must provide the actual implementation.
+
+An interface is used to achieve:
+
+Abstraction
+Loose coupling
+Multiple inheritance
+Better maintainability
+Flexibility in applications
+
+Real-world example:
+
+Suppose we are building a Notification System.
+
+The application should send notifications using:
+
+Email
+SMS
+WhatsApp
+
+All notification services should follow one common rule:
+
+SendNotification()
+
+So we create an interface.
+
+Each service implements the method differently.
+
+This is very common in enterprise .NET Core applications.
+
+using System;
+
+// Interface
+public interface INotificationService
+{
+    void SendNotification();
+}
+
+// Email Service
+public class EmailService : INotificationService
+{
+    public void SendNotification()
+    {
+        Console.WriteLine("Email Notification Sent");
+    }
+}
+
+// SMS Service
+public class SmsService : INotificationService
+{
+    public void SendNotification()
+    {
+        Console.WriteLine("SMS Notification Sent");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        INotificationService service = new EmailService();
+
+        service.SendNotification();
+    }
+}
+
+Q: What is the difference between Encapsulation and Abstraction?
+Encapsulation focuses on data hiding and security
+Abstraction focuses on hiding implementation complexity
+
+Encapsulation					Abstraction
+Hides data	    				Hides implementation
+Focuses on security				Focuses on simplicity
+Achieved using private/public	Achieved using abstract class/interface
+Controls data access			Hides internal complexity
+Example: Bank balance protection	Example: Payment gateway
+
+Q: What is the difference between Interface and Abstraction? 
+Interface							Abstract Class
+Used to define contract				Used to provide common functionality
+Supports multiple inheritance		Does not support multiple inheritance
+Cannot contain normal fields		Can contain fields
+No constructor						Can have constructor
+All methods must be implemented		Some methods can already have implementation
+Used for loose coupling				Used for code reuse
+Implemented using interface keyword	Implemented using abstract keyword
+
+Q: Why does C# not support multiple inheritance using classes?
+C# does not support multiple inheritance using classes because it can create ambiguity and confusion in the application.
+
+In simple words, if one child class inherits from multiple parent classes, and both parent classes contain methods with the same name, 
+then the compiler gets confused about which method should be executed.
+
+Q: What is polymorphism?
+Poly = Many
+Morph = Forms
+
+the same method name can perform different actions depending on the object that calls it.
+
+There are 2 types of Polymorphism:
+
+1. Compile-Time Polymorphism (Method Overloading)
+
+The same method name is used, but with different parameters.
+
+public class Calculator
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+}
+
+2. Runtime Polymorphism (Method Overriding)
+
+A child class overrides a method from the parent class and provides its own implementation.
+
+public class Animal
+{
+    public virtual void Sound()
+    {
+        Console.WriteLine("Animal Sound");
+    }
+}
+
+public class Dog : Animal
+{
+    public override void Sound()
+    {
+        Console.WriteLine("Dog Barks");
+    }
+}
+
+Q: What are virtual, override, and new keywords?
+virtual	- Allows a method to be overridden
+override - Replaces parent method implementation
+new - Hides parent method
+
+Q: Explain Inheritance?
+Inheritance is an OOP concept that allows one class to acquire the properties and methods of another class.
+
+The class that provides the properties and methods is called the Parent/Base Class, and the class that inherits them is called the Child/Derived Class.
+
+The main purpose of inheritance is:
+
+Code Reusability
+Reduced Code Duplication
+Easy Maintenance
+Better Code Organization
+
+Q: Explain constructor?
+A Constructor is a special method in a class that is automatically called when an object of the class is created.
+
+The constructor name must be the same as the class name, and it does not have a return type (not even void).
+
+Types of Constructors 
+1. Default Constructor
+A constructor with no parameters is called a Default Constructor.
+public class Employee
+{
+    public Employee()
+    {
+        Console.WriteLine("Default Constructor Called");
+    }
+}
+
+2. Parameterized Constructor
+A constructor that accepts parameters is called a Parameterized Constructor.
+
+public class Employee
+{
+    public string Name;
+
+    public Employee(string name)
+    {
+        Name = name;
+    }
+}
+
+3. Copy Constructor
+A constructor that creates a new object by copying values from another object.
+public class Employee
+{
+    public string Name;
+
+    public Employee(string name)
+    {
+        Name = name;
+    }
+
+    public Employee(Employee emp)
+    {
+        Name = emp.Name;
+    }
+}
+4. Static Constructor
+
+A constructor declared with the static keyword.
+public class Employee
+{
+    static Employee()
+    {
+        Console.WriteLine("Static Constructor Called");
+    }
+}
+
+5. Private Constructor
+
+A constructor declared as private.
+public class Singleton
+{
+    private Singleton()
+    {
+    }
+}
+
+Q: Explain Destructor?
+A Destructor is a special method that is automatically called when an object is destroyed by the Garbage Collector.
+
+Q: What is a static class?
+A static class is a class that cannot be instantiated and contains only static members. It is used to store utility methods, helper functions, 
+and common logic that does not depend on object-specific data. Static members can be accessed directly using the class name without creating an object.
+ In real-world .NET applications, static classes are commonly used for helper methods, utility functions, and constants.
+
+Q: Explain SOLID principles?
+These principles were introduced by Robert C. Martin.
+
+SOLID principles help us design applications that are easy to modify, test, and maintain as the project grows.
+
+S - Single Responsibility Principle (SRP)
+A class should have only one reason to change.
+A class should do only one job.
+
+O - Open/Closed Principle (OCP)
+Software entities should be open for extension but closed for modification.
+We should be able to add new functionality without changing existing code.
+
+L - Liskov Substitution Principle (LSP)
+A child class should be able to replace its parent class without breaking the application.
+If a parent object works somewhere, the child object should also work correctly there.
+
+I - Interface Segregation Principle (ISP)
+Clients should not be forced to implement methods they do not use.
+Create small and specific interfaces instead of one large interface.
+
+D - Dependency Inversion Principle (DIP)
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+Depend on interfaces, not concrete classes.
+
+Q: Design pattern
+A Design Pattern is a standard way of solving a problem that developers frequently face while building applications.
+
+1. Singleton Pattern
+Ensures that only one instance of a class exists throughout the application.
+
+2. Factory Pattern
+Creates objects without exposing the object creation logic to the client.
+
+3. Repository Pattern
+Separates database access logic from business logic.
+
+4. Dependency Injection Pattern
+Dependencies are provided from outside rather than created inside the class.
+
+A Design Pattern is a reusable solution to a common software design problem. It provides a standard approach for solving recurring design challenges 
+and helps create maintainable, scalable, and loosely coupled applications. In .NET Core, commonly used design patterns include 
+Singleton, Factory, Repository, Strategy, and Dependency Injection. These patterns improve code quality, reusability, and maintainability in enterprise applications.
+
+Q: Difference Between IEnumerable and IQueryable
+
+Both IEnumerable and IQueryable are used to retrieve and work with collections of data in C#.
+IEnumerable executes filtering in memory, while IQueryable executes filtering in the database.
+
+IEnumerable → Data processing happens in memory
+IQueryable → Query is executed at the database
+
+IEnumerable
+IEnumerable is used for working with in-memory collections.
+
+When data is fetched from the database, it is first loaded into application memory, and then filtering, sorting, and other operations are performed.
+
+var employees = context.Employees.ToList();
+
+var result = employees.Where(x => x.Department == "IT");
+
+IQueryable
+
+IQueryable is used to query data sources like SQL Server.
+
+Filtering, sorting, and paging are converted into SQL queries and executed directly in the database.
+
+var result = context.Employees.Where(x => x.Department == "IT");
+
+IEnumerable								IQueryable
+Works with in-memory collections		Works with database queries
+Filtering happens in memory				Filtering happens in database
+Less efficient for large data			More efficient for large data
+Uses LINQ to Objects					Uses LINQ to Entities
+Suitable for small collections			Suitable for database operations
+Executes after data is fetched			Generates SQL before fetching data
+
+Q: Difference Between app.Use() and app.Map()?
+Both app.Use() and app.Map() are used in the ASP.NET Core middleware pipeline, but they work differently.
+
+app.Use() → Adds middleware to the request pipeline and passes the request to the next middleware.
+
+app.Use() is used to add middleware into the request processing pipeline.
+
+Each middleware can:
+
+Process the request
+Call the next middleware
+Process the response
+
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("Before Request");
+
+    await next();
+
+    Console.WriteLine("After Response");
+});
+
+app.Map() → Creates a separate branch of the pipeline for a specific URL path.
+
+Execute specific middleware only when a particular route is requested.
+
+app.Map("/admin", adminApp =>
+{
+    adminApp.Run(async context =>
+    {
+        await context.Response.WriteAsync("Admin Area");
+    });
+});
+
+app.Use()										app.Map()
+Adds middleware to main pipeline				Creates separate pipeline branch
+Runs for all requests							Runs only for matching path
+Calls next middleware using next()				Creates independent route branch
+Used for Authentication, Authorization, Logging	Used for path-based routing
+Middleware continues execution					Pipeline branches based on URL
+
+Q: How to Apply Security in a .NET Application?
+Application security means protecting the application, APIs, database, and user data from unauthorized access, attacks, and misuse.
+
+1. Authentication & Authorization
+Use JWT or OpenID Connect/OAuth 2.0 for authentication.
+2. HTTPS
+Always use HTTPS so credentials and tokens are encrypted while traveling between client and server.
+3. Validate User Input
+Never blindly trust data coming from React/client.
+4. Prevent SQL Injection
+Don't concatenate user input into SQL.
+var sql = "SELECT * FROM Employee WHERE Name = '" + name + "'";
+
+Use EF Core LINQ or parameterized SQL:
+
+var employees = dbContext.Employees
+    .Where(x => x.Name == name)
+    .ToList();
+5. Protect Sensitive Data
+
+Don't store passwords as plain text.
+
+Use a proper password-hashing mechanism such as ASP.NET Core Identity's password hasher.
+
+Also don't put:
+
+Passwords
+Connection strings
+API secrets
+Private keys
+
+directly in source code.
+
+6. Rate Limiting
+
+Protect login and sensitive APIs from excessive requests.
+
+Rate limiting is a security mechanism that controls how many requests a client can make to an API within a specific period of time.
+
+----------------End-----------------------
+
+--------------SQL Questions----------------
+Q: Difference between DELETE, TRUNCATE, and DROP?
+DELETE - DELETE is a DML (Data Manipulation Language) command used to remove one or more rows from a table.
+TRUNCATE - TRUNCATE is a DDL (Data Definition Language) command used to remove all rows from a table.TRUNCATE quickly removes all data from a table but keeps the table structure for future use.
+DROP - DROP permanently removes the table along with all its data, structure, indexes, and constraints.
+
+Q: Clustered vs Non-clustered index?
+An Index is a database object that improves the speed of data retrieval from a table
+
+A Clustered Index is an index that physically stores and sorts the table data based on the indexed column. Since the actual data is arranged in sorted order, 
+SQL Server can retrieve records much faster. A table can have only one Clustered Index because data can be physically ordered only once. 
+In real-world applications, the Primary Key is commonly used as the clustered index because it is unique, frequently searched, 
+and provides excellent query performance.
+
+CREATE CLUSTERED INDEX IX_Employee_Id
+ON Employee(EmployeeId);
+
+DROP INDEX IX_Employee_Id
+ON Employee;
+
+If the Primary Key created the clustered index automatically, you cannot remove it using DROP INDEX.
+
+You cannot remove the index directly using DROP INDEX because the index belongs to the Primary Key constraint.
+You must first drop the Primary Key constraint, and SQL Server will automatically remove the associated index.
+
+A Non-Clustered Index does not change the physical order of the data in the table. Instead, it creates a separate structure 
+that helps SQL Server quickly locate the required rows.
+
+Think of it like the index at the back of a book. The book pages remain in the same order, but the index tells 
+you on which page a particular topic is located.
+
+A Non-Clustered Index is a separate copy of one or more columns that helps SQL Server find data quickly.
+
+Q: Explain primary key and unique key?
+Primary Key - A Primary Key is the main identifier of a table. It ensures that every row has a unique value, and it does not allow NULL values.
+Unique Key - A Unique Key prevents duplicate values in a column, but it is used for columns that must also remain unique, such as Email, PAN, or Aadhaar Number.
+
+Q: Difference between stored procedure and function.
+Stored Procedure - A Stored Procedure is used to perform one or more database operations such as Insert, Update, Delete, or Select. It helps reuse SQL code, 
+improves performance, and keeps business logic inside the database.
+
+CREATE PROCEDURE GetEmployeeById
+    @EmployeeId INT
+AS
+BEGIN
+    SELECT *
+    FROM Employee
+    WHERE EmployeeId = @EmployeeId;
+END;
+
+EXEC GetEmployeeById @EmployeeId = 101;
+Function - A Function is mainly used to calculate or return a value. Unlike a Stored Procedure, it must return something.
+
+CREATE FUNCTION GetAnnualSalary
+(
+    @MonthlySalary DECIMAL(10,2)
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    RETURN @MonthlySalary * 12;
+END;
+SELECT dbo.GetAnnualSalary(50000);
+
+Stored Procedure										Function
+Used to perform database operations						Used to calculate and return a value
+May or may not return data								Must return a value
+Can perform INSERT, UPDATE, DELETE, and SELECT			Cannot perform operations that modify database data (inside a regular function)
+Called using EXEC										Called inside SELECT, WHERE, JOIN, etc.
+Can return multiple result sets	Returns a 				single value or a table (depending on the function type)
+Supports transactions and error handling				Limited transaction/error handling
+
+Q: Explain CTE?
+A CTE is like a temporary table that exists only while a single query is executing. It helps make complex SQL queries easier to read, write, and maintain.
+A CTE is not stored permanently in the database. It exists only during the execution of the query.
+WITH CTE_Name AS
+(
+    SELECT Column1, Column2
+    FROM TableName
+)
+SELECT *
+FROM CTE_Name;
+
+We use CTE to:
+
+Improve query readability.
+Break complex queries into smaller parts.
+Replace complicated subqueries.
+Perform recursive queries (such as employee-manager hierarchy).
+
+Q: Difference between temp table and table variable?
+Temporary Table - A Temporary Table is a table that is created in the tempdb database and exists until it is dropped or the session ends.
+CREATE TABLE #Employee
+(
+    EmployeeId INT,
+    Name VARCHAR(100)
+);
+
+INSERT INTO #Employee
+VALUES (101, 'Rahul');
+
+SELECT * FROM #Employee;
+
+Table Variable - A Table Variable is a variable that stores data in a table format.
+DECLARE @Employee TABLE
+(
+    EmployeeId INT,
+    Name VARCHAR(100)
+);
+
+INSERT INTO @Employee
+VALUES (101, 'Rahul');
+
+SELECT * FROM @Employee;
+
+Temporary Table (#Temp)								Table Variable (@Table)
+Created using CREATE TABLE #Temp					Created using DECLARE @Table TABLE
+Stored in tempdb									Also stored in tempdb internally, but behaves like a variable
+Best for large amounts of data						Best for small amounts of data
+Can have indexes (Clustered/Non-Clustered)			Limited indexing support (mainly through PRIMARY KEY/UNIQUE constraints)
+Better for complex joins and large reports			Better for simple processing
+Exists until dropped or session ends				Exists only within the current batch, function, or stored procedure
+
+Q: Difference Between Temporary Table (#Temp) and CTE (Common Table Expression)?
+Temporary Table 										(#Temp)	CTE
+Stores data physically in tempdb						Does not store data physically
+Exists until dropped or the session ends				Exists only for a single SQL statement
+Can be used multiple times								Can be used only once in the statement immediately following the WITH clause
+Best for large datasets									Best for improving query readability
+Supports indexes										Cannot create indexes on a CTE
+Suitable for complex reports and multiple operations	Suitable for simple queries, recursive queries, and replacing subqueries
+
+Q: Explain normalization.
+Normalization is the process of organizing data in a database to reduce data redundancy (duplicate data) and improve data consistency.
+
+1. First Normal Form (1NF)
+Rule: Each column should contain only one value (no multiple values in a single column).
+
+2. Second Normal Form (2NF)
+Rule: The table should already be in 1NF, and all non-key columns should depend on the entire Primary Key.
+Move data that doesn't fully depend on the primary key into another table.
+Does every column depend on the entire Primary Key?
+
+3. Third Normal Form (3NF)
+Rule: The table should already be in 2NF, and non-key columns should depend only on the Primary Key, not on another non-key column.
+
+Q: Explain denormalization?
+Denormalization is the process of combining normalized tables into fewer tables by adding duplicate data to make data retrieval faster.
+
+Normalization					Denormalization
+Removes duplicate data			Adds duplicate data intentionally
+Reduces redundancy				Increases redundancy
+Requires more JOINs				Requires fewer JOINs
+Better for data consistency		Better for read performance
+Used in OLTP systems			Commonly used in reporting and analytics
+
+Q: Difference between UNION and UNION ALL?
+UNION is used to combine the results of two or more SELECT statements into a single result set.
+
+SELECT EmployeeId, Name
+FROM Employee2024
+UNION
+SELECT EmployeeId, Name
+FROM Employee2025;
+
+UNION ALL is also used to combine the results of two or more SELECT statements.
+
+UNION														UNION ALL
+Removes duplicate rows										Keeps duplicate rows
+Slightly slower because SQL Server checks for duplicates	Faster because it simply combines the results
+Used when only unique records are required					Used when all records are required
+
+Q: Explain different JOIN types?
+INNER JOIN - INNER JOIN returns only the records that exist in both tables.
+LEFT JOIN - LEFT JOIN returns all records from the left table and matching records from the right table.
+RIGHT JOIN - RIGHT JOIN returns all records from the right table and matching records from the left table.
+FULL OUTER JOIN - FULL OUTER JOIN returns all records from both tables. If there is no match, SQL Server returns NULL for the missing side.
+CROSS JOIN - CROSS JOIN returns every possible combination of rows from both tables.
+SELF JOIN - SELF JOIN means joining a table with itself.
+
+Advanced SQL Questions
+Q: Find second highest salary?
+WITH SalaryCTE AS
+(
+    SELECT
+        EmployeeName,
+        Salary,
+        DENSE_RANK() OVER (ORDER BY Salary DESC) AS SalaryRank
+    FROM Employee
+)
+SELECT EmployeeName, Salary
+FROM SalaryCTE
+WHERE SalaryRank = 2;
+
+RANK() → skips rank after duplicates.
+DENSE_RANK() → does not skip rank after duplicates.
+
+Q: Remove duplicate rows?
+
+WITH DuplicateCTE AS
+(
+    SELECT
+        Id,
+        Name,
+        Email,
+        ROW_NUMBER() OVER
+        (
+            PARTITION BY Name, Email
+            ORDER BY Id
+        ) AS RowNum
+    FROM Employee
+)
+
+delete from Employee where Id in (select Id from DuplicateCTE WHERE RowNum > 1;)
+
+Q: Find Employees Who Joined in the Last 30 Days?
+
+SELECT EmployeeId,
+       EmployeeName,
+       JoiningDate
+FROM Employee
+WHERE JoiningDate >= DATEADD(DAY, -30, GETDATE());
+
+Q: Explain ROW_NUMBER(), RANK(), DENSE_RANK()?
+ROW_NUMBER() gives every row a unique number.
+RANK() gives the same rank to duplicate values, but skips the next rank.
+DENSE_RANK() gives the same rank to duplicate values but does not skip the next rank.
+
+Q: Explain deadlock?
+A deadlock occurs when two or more transactions are waiting for each other to release resources, so none of them can continue.
+
+How to Prevent Deadlocks
+
+Keep transactions short.
+Access tables/rows in a consistent order.
+Use appropriate indexes to reduce the time locks are held.
+Avoid unnecessary operations inside transactions.
+Avoid keeping a transaction open while doing external operations.
+Investigate blocking and deadlock graphs when troubleshooting.
+
+Q: How to Optimize a Stored Procedure?
+Stored Procedure optimization means improving the SQL queries inside a stored procedure so that it executes faster, 
+uses fewer CPU and memory resources, reads fewer rows, and returns the required result efficiently.
+First, I would run the procedure with the Actual Execution Plan and check whether SQL Server is doing:
+Table Scan
+Index Scan
+Key Lookup
+Expensive Sort
+Expensive Join
+
+Check Execution Plan
+Find which query or operation is taking the most time.
+Create Proper Indexes
+Add indexes on columns frequently used in WHERE, JOIN, and ORDER BY.
+Avoid SELECT *
+Select only the columns you actually need.
+Optimize JOINs and WHERE conditions
+Remove unnecessary joins and make filtering conditions efficient.
+Avoid unnecessary loops and temporary data
+Prefer set-based queries instead of cursors/loops where possible.
+Check performance before and after
+Compare execution time, CPU usage, and logical reads after optimization.
+
+Real Project Questions (Very Important)
+Explain your project architecture.
+How many APIs did you create?
+Q: Explain one challenging bug?
+One challenging bug I faced was a performance issue in an HRMS dashboard where an API was taking around 10 to 15 seconds to return data. 
+I first checked the API, service, repository, and Dapper code and found that they were working correctly. 
+Then I executed the stored procedure directly in SQL Server and found that the stored procedure itself was slow. 
+I checked the Actual Execution Plan and identified an inefficient table scan and unnecessary data processing.
+I optimized the query and added the appropriate index. After the change, I tested the stored procedure with different inputs and verified 
+both the performance and the correctness of the result. This taught me to identify the actual bottleneck first instead of making assumptions 
+about which application layer is causing the problem.
+ 
+
+Q: How did you optimize API performance?
+Optimize database queries
+I check the stored procedure's execution plan, add proper indexes, remove unnecessary joins, and return only required columns.
+Use Dapper efficiently
+Since my project uses Dapper, I use asynchronous methods like QueryAsync() and avoid unnecessary database calls.
+Reduce API response data
+Instead of returning unnecessary fields, I return only the required data using DTOs.
+Implement pagination
+I don't return thousands of records at once. I use PageNumber and PageSize so the API returns only the required records.
+Use caching where appropriate
+For data that doesn't change frequently, such as master data, I can use memory or distributed caching to avoid hitting the database repeatedly.
+Use asynchronous programming
+I use async/await for database and other I/O operations so the application can handle concurrent requests more efficiently.
+
+Q: Explain chunk file upload implementation?
+Chunk file upload means dividing a large file into smaller pieces, called chunks, and uploading those chunks separately instead of uploading 
+the entire file in a single request. After all chunks are uploaded, the server combines them back into the original file.
+
+Q: How did you handle exceptions globally?
+Global exception handling means handling unhandled exceptions at a central place instead of writing try-catch blocks in every Controller or Service method.
+
+I handle unexpected exceptions globally using custom exception-handling middleware. The middleware wraps the request pipeline inside a try-catch block. 
+If an unhandled exception occurs in the Controller, Service, or Repository, the middleware catches it, logs the detailed exception using the application's 
+logging mechanism, and returns a standardized HTTP response to the client. This avoids writing repetitive try-catch blocks in every method and 
+also prevents exposing sensitive exception details to the client.
+
+
+Explain logging implementation.
+Explain authentication flow in your project.
+How do you deploy applications?
+Explain your database design.
+Scenario Questions
+API response became slow after production deployment. How will you debug?
+Database CPU is 100%. What will you check?
+Multiple users update the same record. How do you handle concurrency?
+API returns duplicate records. How will you investigate?
+One SQL query takes 30 seconds. How do you optimize it?
+How would you process 5 lakh records?
+How would you design a notification service?
+How would you improve existing code quality?
+How do you reduce memory usage?
+Explain one production issue you solved.
+
+
+JWT life cycle
+
+Apply security
