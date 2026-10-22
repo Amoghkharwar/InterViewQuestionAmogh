@@ -49,6 +49,11 @@ Console.WriteLine(emp1.Name); // Amit
 Console.WriteLine(emp2.Name); // Amit
 
 What is the difference between ref, out, and in parameters?
+ref: The variable must be initialized before the method call, and the method can read and modify its value.
+
+out: The variable does not need to be initialized before the method call, but the method must assign a value before returning.
+
+in: The variable must be initialized before the method call, and the method can read it but cannot directly reassign the parameter.
 
 
 Explain boxing and unboxing with examples.
