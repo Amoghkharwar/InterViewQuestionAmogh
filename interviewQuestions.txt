@@ -86,6 +86,9 @@ Q: What is the difference between == and .Equals()?
 "== generally checks whether two objects are the same object in memory, while .Equals() checks whether two objects have the same value or content.
 
 Explain const vs readonly.
+Ans) const is used for a value that is fixed at compile time. You must assign its value when declaring it.
+
+Readonly is a keyword used for a field that can be assigned at declaration or inside a constructor. After construction, it cannot be reassigned from a normal
 
 Q: What are delegates and events?
 
