@@ -57,6 +57,26 @@ in: The variable must be initialized before the method call, and the method can 
 
 
 Explain boxing and unboxing with examples.
+Ans) Boxing is the process of converting a value type into an object reference type.
+Example:- 
+int number = 10;
+
+object obj = number;  // Boxing
+
+Console.WriteLine(obj);
+
+Unboxing is the process of extracting a value type from a boxed object.
+
+Example:- 
+
+int number = 10;
+
+object obj = number;  // Boxing
+
+int result = (int)obj; // Unboxing
+
+Console.WriteLine(result);
+
 Q: What is the difference between string and StringBuilder?
 
 "string is immutable and creates new objects whenever modified, while StringBuilder is mutable and updates the same object, making it more efficient for repeated string operations."
